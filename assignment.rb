@@ -8,7 +8,7 @@ loop do
 	puts "For Deleting an event, Enter: 4"
 	puts "To Quit, Enter 5"
 	line = gets.chomp
-	e = []
+	e =[]
 	count = -1
 	case line
 	when "1"
