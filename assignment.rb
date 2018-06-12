@@ -39,5 +39,7 @@ loop do
 		puts
 		p "Thank You"
 		break
+	else
+		puts "Kindly choose the correct option"
 	end
 end

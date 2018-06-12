@@ -64,7 +64,7 @@ class EventRecord
 	end
 	
 	def self.delete_event
-		if @@date_event.length == 0
+		if @@e_name.length == 0
 			puts "No event added yet"
 		else
 			print  "Enter name of the Event to delete \n"
