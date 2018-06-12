@@ -1,13 +1,11 @@
 class EventRecord
-	@@all_events = []
 	@@date_event = {}
-
+	@@e_name=[]
 	def add_event_details(name,date)
-		@@all_events <<  Event_Details.new(name,date)
-		
 		date = date.split("-")
 		d = date[2]
 		date = date[0] + "-" + date[1]
+		@@e_name << name
 		if @@date_event.has_key? (date)
 			@@date_event[date].push([name,d])
 		else
@@ -17,11 +15,11 @@ class EventRecord
 	end
 	
 	def self.return_all_events
-		if @@all_events.length == 0
+		if @@e_name.length == 0
 			puts "No event added yet"
 		else
-			@@all_events.each.with_index(1) do |n,idx|
-				puts "#{idx}: #{n.inspect}"
+			@@e_name.each.with_index(1) do |n,idx|
+				puts "#{idx}: #{n}"
 		end
 		end
 	end
@@ -31,8 +29,7 @@ class EventRecord
 	end
 	
 	def self.events_for_given_month
-		puts
-		if @@all_events.length == 0
+		if @@e_name.length == 0
 			puts "No event added yet"
 		else
 			print "Enter the required year\n"
@@ -67,24 +64,30 @@ class EventRecord
 	end
 	
 	def self.delete_event
-		if @@all_events.length == 0
+		if @@date_event.length == 0
 			puts "No event added yet"
 		else
 			print  "Enter name of the Event to delete \n"
 			name = gets.chomp
 			print  "Enter date of the Event to delete (yy:mm:dd)\n"
 			date = gets.chomp
+			t = date.split("-")
+			year = t[0]
+			month = t[1]
+			date=t[2]
 			flag = 0	
-			for i in (0...@@all_events.length)
-				if @@all_events[i].name == name
-					if @@all_events[i].date == date
-						@@all_events[i..i] = []
-						flag = 1
-						puts "Event Deleted"
-						break
-					end
+			temp = @@date_event[year+"-"+month]
+			for i in (0...temp.length)
+				if temp[i][1] == date
+					temp[i..i]=[]
+					@@e_name[@@e_name.index(name)..@@e_name.index(name)]=[]
+					@@date_event[year+"-"+month] = temp
+					flag = 1
+					puts "Event Deleted"
+					break
 				end
 			end
+
 			if flag == 0
 				puts "Event not found"
 			end
