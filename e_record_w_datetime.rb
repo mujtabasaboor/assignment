@@ -1,17 +1,21 @@
+require 'date'
 
 class EventRecord
 	@@date_event = {}
 	@@e_name=[]
-	def add_event_details(name,date)
-		date = date.split("-")
-		d = date[2]
-		date = date[0] + "-" + date[1]
+	def add_event_details(name,data)
+		tmp = data.split("-")
+		var = DateTime.new(tmp[0].to_i,tmp[1].to_i,tmp[2].to_i)
+		year = var.year.to_s
+		month = var.month.to_s
+		date = var.day.to_s
 		@@e_name << name
-		if @@date_event.has_key? (date)
-			@@date_event[date].push([name,d])
+		key = year + "-" + month
+		if @@date_event.has_key? (key)
+			@@date_event[key].push([name,date])
 		else
-			@@date_event[date] = Array.new
-			@@date_event[date].push([name,d])
+			@@date_event[key] = Array.new
+			@@date_event[key].push([name,date])
 		end
 	end
 	
@@ -34,26 +38,26 @@ class EventRecord
 			puts "No event added yet"
 		else
 			print "Enter the required year\n"
-			y = gets.chomp
+			year = gets.chomp
 			print "Enter the required month\n"
-			m = gets.chomp
-			if [1,3,5,7,8,10,12].include?(m.to_i)
+			month = gets.chomp
+			if [1,3,5,7,8,10,12].include?(month.to_i)
 				range = (1..31)
-			elsif [4,6,9,11].include?(m.to_i)
+			elsif [4,6,9,11].include?(month.to_i)
 				range = (1..30)
 			else
 				range = (1..28)
 			end
-			tmp = Hash.new{|h,k| h[k] = [] }
-			
-			if @@date_event.has_key? (y+"-"+m)
-				@@date_event[y+"-"+m].each do |n|
-					tmp[n[1].to_i] << n[0]
+			tmp_hash = Hash.new{|h,k| h[k] = [] }
+			key = year + "-" + month
+			if @@date_event.has_key? (key)
+				@@date_event[key].each do |n|
+					tmp_hash[n[1].to_i] << n[0]
 				end
-				tmp = tmp.sort.to_h
+				tmp_hash = tmp_hash.sort.to_h
 				range.each do |x|
-					if tmp.has_key? (x)
-						print "Date #{x}: Event Scheduled: #{tmp[x]}\n"
+					if tmp_hash.has_key? (x)
+						print "Date #{x}: Event Scheduled: #{tmp_hash[x]}\n"
 					else
 						print "Date #{x}: \n"
 					end
@@ -76,13 +80,14 @@ class EventRecord
 			year = t[0]
 			month = t[1]
 			date=t[2]
-			flag = 0	
-			temp = @@date_event[year+"-"+month]
+			flag = 0
+			key = year + "-" + month	
+			temp = @@date_event[key]
 			for i in (0...temp.length)
 				if temp[i][1] == date
 					temp[i..i]=[]
 					@@e_name[@@e_name.index(name)..@@e_name.index(name)]=[]
-					@@date_event[year+"-"+month] = temp
+					@@date_event[key] = temp
 					flag = 1
 					puts "Event Deleted"
 					break

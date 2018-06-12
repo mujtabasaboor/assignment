@@ -1,5 +1,5 @@
 require_relative "e_record.rb"
-require_relative "e_details.rb"	
+	
 loop do 
 	puts
 	puts "For Adding an event, Enter: 1"
